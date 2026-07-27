@@ -1,48 +1,204 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-
-const title = 'About';
-const description = 'About your blog.';
-const permalink = `${Astro.site.href}about`;
+import VPLayout from '../layouts/VPLayout.astro';
+import VPNav from '../components/VPNav.astro';
+import VPFooter from '../components/VPFooter.astro';
 ---
 
-<BaseLayout title={title} description={description} permalink={permalink} current="about">
-  <div class="container">
-    <h1>About</h1>
-    <figure class="about-image">
-      <img src="/assets/about-illustration.webp" alt="Illustration of a notebook" width="330">
-      <figcaption>
-        Illustration by
-        <a href="https://icons8.com/illustrations/author/5c07e68d82bcbc0092519bb6" target="_blank" rel="noopener">Icons 8</a>
-        from
-        <a href="https://icons8.com/illustrations" target="_blank" rel="noopener">Ouch!</a>
-      </figcaption>
-    </figure>
-    <p>Text placeholder via <a href="https://jeffsum.com/" target="_blank">Jeffsum</a>.</p>
-    <p>So you two dig up, dig up dinosaurs? What do they got in there? King Kong? My dad once told me, laugh and the world laughs with you, Cry, and I'll give you something to cry about you little bastard! Life finds a way. God creates dinosaurs. God destroys dinosaurs. God creates Man. Man destroys God. Man creates Dinosaurs.</p>
-    <p>You really think you can fly that thing? You know what? It is beets. I've crashed into a beet truck. Forget the fat lady! You're obsessed with the fat lady! Drive us out of here! Is this my espresso machine? Wh-what is-h-how did you get my espresso machine?</p>
-    <p>Hey, you know how I'm, like, always trying to save the planet? Here's my chance. Hey, take a look at the earthlings. Goodbye! I was part of something special. Just my luck, no ice. You're a very talented young man, with your own clever thoughts and ideas. Do you need a manager?</p>
-    <p>Jaguar shark! So tell me - does it really exist? This thing comes fully loaded. AM/FM radio, reclining bucket seats, and... power windows. Yes, Yes, without the oops! You're a very talented young man, with your own clever thoughts and ideas. Do you need a manager?</p>
-    <p>Yes, Yes, without the oops! Do you have any idea how long it takes those cups to decompose. They're using our own satellites against us. And the clock is ticking. Do you have any idea how long it takes those cups to decompose. My dad once told me, laugh and the world laughs with you, Cry, and I'll give you something to cry about you little bastard!</p>
+<VPLayout title="About — Alper Kucukkomurler" description="Robotics engineer building a camera-first autonomous quadruped">
+  <div class="vp-page">
+    <VPNav current="about" />
+
+    <section class="about">
+      <div class="about-image-col">
+        <div class="image-placeholder">[ portrait ]</div>
+        <div class="about-links">
+          <a href="https://github.com/alperk" target="_blank" rel="noopener">→ github.com/alperk</a>
+          <a href="https://linkedin.com/in/alperk" target="_blank" rel="noopener">→ linkedin.com/in/alperk</a>
+          <a href="mailto:alper@visualpaws.dev">→ alper@visualpaws.dev</a>
+        </div>
+      </div>
+
+      <div class="about-content">
+        <h1>whoami</h1>
+        <div class="bio">
+          <p>
+            I'm Alper Kucukkomurler, a robotics engineer with ten years in the field and multiple
+            robots deployed in the real world — machines that work in warehouses, fields, and
+            factories, not just labs.
+          </p>
+          <p>
+            VisualPaws is my side project: an attempt to build a genuinely capable autonomous
+            quadruped with nothing but cameras for perception, and to document every step in
+            public — the dead ends included.
+          </p>
+        </div>
+
+        <div class="timeline">
+          <div class="timeline-header">TIMELINE</div>
+          <div class="timeline-row">
+            <span class="timeline-date active">2025 — now</span>
+            <span class="timeline-item">VisualPaws — open-source camera-first quadruped</span>
+          </div>
+          <div class="timeline-row">
+            <span class="timeline-date">2020 — now</span>
+            <span class="timeline-item">Senior robotics engineer — autonomous systems in production</span>
+          </div>
+          <div class="timeline-row">
+            <span class="timeline-date">2016 — 2020</span>
+            <span class="timeline-item">Robotics engineer — perception &amp; controls, field deployments</span>
+          </div>
+          <div class="timeline-row last">
+            <span class="timeline-date">2016</span>
+            <span class="timeline-item">First robot shipped to a real customer</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <VPFooter />
   </div>
-</BaseLayout>
+</VPLayout>
 
 <style>
-  .about-image {
-    float: right;
-    margin: -3em -7em 2em 2em;
-    max-width: 300px;
+  .vp-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
   }
 
-  .about-image img {
-    border-radius: 8px;
-    margin-bottom: 1.5em;
+  .about {
+    padding: 56px 40px 48px;
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 56px;
+    flex: 1;
   }
 
-  @media (max-width: 1020px) {
-    .about-image {
-      float: none;
-      margin: 0 auto 2em;
+  /* ── image col ── */
+  .about-image-col {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .image-placeholder {
+    height: 320px;
+    border: 1px solid #3a4038;
+    background: repeating-linear-gradient(
+      45deg,
+      #101310,
+      #101310 10px,
+      #141814 10px,
+      #141814 20px
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: #8a9088;
+  }
+
+  .about-links {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 13px;
+    color: #8a9088;
+  }
+
+  .about-links a:hover {
+    color: #d8ff3e;
+  }
+
+  /* ── content ── */
+  .about-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  h1 {
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #d6e0d4;
+  }
+
+  .bio {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 17px;
+    line-height: 1.75;
+    color: #b7beb3;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .bio p {
+    margin: 0;
+  }
+
+  /* ── timeline ── */
+  .timeline {
+    border-top: 1px solid #1e231d;
+    padding-top: 24px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .timeline-header {
+    font-size: 12px;
+    color: #8a9088;
+    letter-spacing: 0.12em;
+    padding-bottom: 14px;
+  }
+
+  .timeline-row {
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    gap: 20px;
+    padding: 12px 0;
+    border-bottom: 1px solid #1e231d;
+  }
+
+  .timeline-row.last {
+    border-bottom: none;
+  }
+
+  .timeline-date {
+    font-size: 13px;
+    color: #5c6359;
+  }
+
+  .timeline-date.active {
+    color: #d8ff3e;
+  }
+
+  .timeline-item {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 15px;
+    color: #b7beb3;
+  }
+
+  /* ── responsive ── */
+  @media (max-width: 900px) {
+    .about {
+      grid-template-columns: 1fr;
+      padding: 32px 20px 40px;
+      gap: 32px;
+    }
+
+    .about-image-col {
+      display: none;
+    }
+
+    h1 {
+      font-size: 28px;
+    }
+
+    .timeline-row {
+      grid-template-columns: 110px 1fr;
+      gap: 12px;
     }
   }
 </style>

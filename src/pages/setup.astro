@@ -1,0 +1,220 @@
+---
+import VPLayout from '../layouts/VPLayout.astro';
+import VPNav from '../components/VPNav.astro';
+import VPFooter from '../components/VPFooter.astro';
+
+const sections = [
+  {
+    num: '01',
+    label: 'LINUX & DOTFILES',
+    items: [
+      {
+        title: '.zshrc + tmux config',
+        file: 'dotfiles/',
+        desc: 'Shell aliases for ROS 2 workflows, fzf everywhere, one-key robot ssh sessions.',
+        href: 'https://github.com/alperk/dotfiles',
+      },
+      {
+        title: 'Ubuntu realtime tuning',
+        file: 'setup.md',
+        desc: 'PREEMPT_RT kernel flags, CPU isolation, and udev rules for the motor bus.',
+        href: 'https://github.com/alperk/visualpaws',
+      },
+    ],
+  },
+  {
+    num: '02',
+    label: 'CLAUDE SKILLS & AI TOOLING',
+    items: [
+      {
+        title: 'firmware-review skill',
+        file: 'SKILL.md',
+        desc: 'Reviews motor-control PRs against my safety checklist before anything touches hardware.',
+        href: 'https://github.com/alperk/visualpaws',
+      },
+      {
+        title: 'log-triage skill',
+        file: 'SKILL.md',
+        desc: 'Feeds crash telemetry to Claude and gets back a ranked list of suspect subsystems.',
+        href: 'https://github.com/alperk/visualpaws',
+      },
+    ],
+  },
+  {
+    num: '03',
+    label: 'BENCH & TOOLS',
+    items: [
+      {
+        title: 'Hardware shortlist',
+        file: 'bench.md',
+        desc: 'Printer, PSU, scope, crimpers — the short list that covers 95% of the build.',
+        href: 'https://github.com/alperk/visualpaws',
+      },
+      {
+        title: 'Sim environment',
+        file: 'sim/',
+        desc: 'Reproducible MuJoCo scene + domain-randomization presets I train gaits in.',
+        href: 'https://github.com/alperk/visualpaws',
+      },
+    ],
+  },
+];
+---
+
+<VPLayout title="Steal My Setup — VisualPaws" description="Configs, dotfiles, and AI tooling used to build VisualPaws">
+  <div class="vp-page">
+    <VPNav current="setup" />
+
+    <section class="setup-header">
+      <h1>steal my setup<span class="cursor">_</span></h1>
+      <p class="setup-desc">
+        The exact configs, dotfiles, and AI tooling I use to build VisualPaws. Everything here is
+        copy-paste ready — take what's useful.
+      </p>
+    </section>
+
+    <section class="setup-sections">
+      {sections.map((section) => (
+        <div class="setup-section">
+          <div class="section-label">
+            {section.num} / {section.label}
+          </div>
+          <div class="section-cards">
+            {section.items.map((item) => (
+              <a href={item.href} class="setup-card" target="_blank" rel="noopener">
+                <div class="card-top">
+                  <span class="card-title">{item.title}</span>
+                  <span class="card-file">{item.file}</span>
+                </div>
+                <p class="card-desc">{item.desc}</p>
+              </a>
+            ))}
+          </div>
+        </div>
+      ))}
+    </section>
+
+    <VPFooter />
+  </div>
+</VPLayout>
+
+<style>
+  .vp-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  /* ── header ── */
+  .setup-header {
+    padding: 56px 40px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 760px;
+  }
+
+  h1 {
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #d6e0d4;
+  }
+
+  .cursor {
+    color: #d8ff3e;
+  }
+
+  .setup-desc {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 17px;
+    line-height: 1.7;
+    color: #a8b0a4;
+  }
+
+  /* ── sections ── */
+  .setup-sections {
+    padding: 24px 40px 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    flex: 1;
+  }
+
+  .setup-section {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .section-label {
+    font-size: 12px;
+    color: #d8ff3e;
+    letter-spacing: 0.12em;
+    border-bottom: 1px solid #1e231d;
+    padding-bottom: 10px;
+  }
+
+  .section-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .setup-card {
+    border: 1px solid #1e231d;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .setup-card:hover {
+    border-color: #d8ff3e;
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  .card-title {
+    font-size: 14px;
+    color: #e6ede3;
+  }
+
+  .card-file {
+    font-size: 11px;
+    color: #5c6359;
+    white-space: nowrap;
+  }
+
+  .card-desc {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #8a9088;
+    margin: 0;
+  }
+
+  /* ── responsive ── */
+  @media (max-width: 700px) {
+    .setup-header {
+      padding: 32px 20px 16px;
+    }
+
+    .setup-sections {
+      padding: 16px 20px 40px;
+    }
+
+    h1 {
+      font-size: 28px;
+    }
+
+    .section-cards {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

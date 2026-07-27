@@ -1,93 +1,298 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import VPLayout from '../layouts/VPLayout.astro';
+import VPNav from '../components/VPNav.astro';
+import VPFooter from '../components/VPFooter.astro';
+import { getCollection } from 'astro:content';
 
-const title = 'Hello! I\'m Alper';
-const description = 'The perfect starter for your perfect blog.';
-const permalink = Astro.site.href;
+let allPosts = await getCollection('posts');
+allPosts = allPosts.sort(
+  (a, b) => new Date(b.data.publishDate).valueOf() - new Date(a.data.publishDate).valueOf()
+);
+const recentPosts = allPosts.slice(0, 3);
+
+function formatDate(d) {
+  const date = typeof d === 'string' ? new Date(d) : d;
+  return date.toISOString().slice(0, 10);
+}
 ---
 
-<BaseLayout title={title} description={description} permalink={permalink}>
-  <div class="home-container">
-    <div class="home-copy">
-      <h1>Hello I'm Alper</h1>
-      <p>I like programming and robotics, Join me on my journey!</p>
-    </div>
+<VPLayout title="VisualPaws — camera-first quadruped build log">
+  <div class="vp-page">
+    <VPNav />
 
-    <div class="hero-image-container">
-      <picture>
-        <source srcset="/assets/home-illustration-alper.webp" media="(min-width: 600px)">
-        <img class="hero-image" alt="Illustration of an engineer with various robots around" src="/assets/home-illustration-small-alper.webp" width="550" height="466">
-      </picture>
-    </div>
+    <section class="hero">
+      <div class="hero-text">
+        <div class="hero-label">OPEN SOURCE · CAMERA-FIRST · AUTONOMOUS</div>
+        <h1>VisualPaws_</h1>
+        <p class="hero-desc">
+          A build log for an open-source quadruped robot that navigates the world through cameras
+          alone. Ten years of robotics, one side project, documented in public.
+        </p>
+        <div class="hero-cta">
+          <a href="/log" class="btn-primary">cat latest_post.md</a>
+          <a href="https://github.com/alperk" class="btn-secondary" target="_blank" rel="noopener">
+            git clone visualpaws
+          </a>
+        </div>
+        <div class="hero-stats">
+          <div><span class="dot">●</span> STATUS: WALKING</div>
+          <div>FW v0.4.2</div>
+          <div>12 DOF</div>
+          <div>2× RGB CAM</div>
+        </div>
+      </div>
+      <div class="hero-image-wrap">
+        <div class="image-placeholder">[ robot photo — VisualPaws v0.4 standing ]</div>
+        <div class="image-caption">fig 01 — current prototype, bench test rig</div>
+      </div>
+    </section>
+
+    <section class="post-log">
+      <div class="post-log-header">BUILD LOG — LATEST ENTRIES</div>
+      {recentPosts.map((post) => {
+        const href = `/log/${post.data.slug}`;
+        const date = formatDate(post.data.publishDate);
+        const tag = post.data.tag || 'NOTES';
+        return (
+          <a href={href} class="post-row">
+            <span class="post-date">{date}</span>
+            <span class="post-tag">{tag}</span>
+            <span class="post-title">{post.data.title}</span>
+            <span class="post-read">→</span>
+          </a>
+        );
+      })}
+      <a href="/log" class="view-all">ls all_posts/ →</a>
+    </section>
+
+    <VPFooter />
   </div>
-</BaseLayout>
+</VPLayout>
 
 <style>
-  .home-container {
-    align-items: center;
+  .vp-page {
     display: flex;
-    flex: 1;
-    justify-content: center;
-    margin: 2em 0;
-    min-height: 400px;
+    flex-direction: column;
+    min-height: 100vh;
   }
 
-  .home-copy {
-    flex: 1;
-    padding: 0 1em;
+  /* ── hero ── */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 460px;
+    gap: 48px;
+    padding: 56px 40px 48px;
   }
 
-  .home-copy h1 {
+  .hero-text {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .hero-label {
+    font-size: 12px;
+    color: #d8ff3e;
+    letter-spacing: 0.12em;
+  }
+
+  h1 {
+    font-size: 52px;
     font-weight: 700;
-    margin-bottom: 0.5em;
-    line-height: 1.3;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: #d6e0d4;
   }
 
-  .home-copy p {
-    font-size: 1.4em;
+  .hero-desc {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 17px;
+    line-height: 1.65;
+    color: #a8b0a4;
+    max-width: 480px;
   }
 
-  .hero-image-container {
-    margin: 0 1em;
+  .hero-cta {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .btn-primary {
+    background: #d8ff3e;
+    color: #0c0e0c;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 12px 20px;
+  }
+
+  .btn-primary:hover {
+    background: #eaff7a;
+    color: #0c0e0c;
+  }
+
+  .btn-secondary {
+    border: 1px solid #3a4038;
+    color: #d6e0d4;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    padding: 12px 20px;
+  }
+
+  .btn-secondary:hover {
+    border-color: #d8ff3e;
+    color: #d8ff3e;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    margin-top: 20px;
+    font-size: 12px;
+    color: #8a9088;
+  }
+
+  .dot {
+    color: #d8ff3e;
+  }
+
+  .hero-image-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .image-placeholder {
+    height: 320px;
+    border: 1px solid #3a4038;
+    background: repeating-linear-gradient(
+      45deg,
+      #101310,
+      #101310 10px,
+      #141814 10px,
+      #141814 20px
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: #8a9088;
+    padding: 6px 12px;
+  }
+
+  .image-caption {
+    font-size: 11px;
+    color: #5c6359;
+  }
+
+  /* ── post log ── */
+  .post-log {
+    padding: 0 40px 48px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .post-log-header {
+    font-size: 12px;
+    color: #8a9088;
+    letter-spacing: 0.12em;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #1e231d;
+  }
+
+  .post-row {
+    display: grid;
+    grid-template-columns: 120px 110px 1fr auto;
+    gap: 24px;
+    align-items: baseline;
+    padding: 18px 0;
+    border-bottom: 1px solid #1e231d;
+  }
+
+  .post-row:hover {
+    background: #101310;
+  }
+
+  .post-date {
+    font-size: 12px;
+    color: #5c6359;
+  }
+
+  .post-tag {
+    font-size: 11px;
+    color: #d8ff3e;
+    border: 1px solid #2c3520;
+    padding: 2px 8px;
     text-align: center;
+    white-space: nowrap;
   }
 
-  .hero-image-container picture {
-    display: block;
-    min-height: 250px;
+  .post-title {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 17px;
+    color: #e6ede3;
   }
 
-  .caption {
-    font-size: .8em;
-    font-style: italic;
-    text-align: left;
+  .post-read {
+    font-size: 12px;
+    color: #5c6359;
   }
 
-  .hero-image {
-    width: 100%;
-    max-width: 550px;
-    margin-bottom: 1em;
+  .view-all {
+    font-size: 13px;
+    color: #d8ff3e;
+    padding-top: 18px;
+    display: inline-block;
   }
 
-  @media (max-width: 1200px) {
-    p {
-      font-size: 1.2em;
+  .view-all:hover {
+    color: #eaff7a;
+  }
+
+  /* ── responsive ── */
+  @media (max-width: 900px) {
+    .hero {
+      grid-template-columns: 1fr;
+      padding: 40px 20px 32px;
     }
 
-    .hero-image {
-      max-width: 400px;
-    }
-  }
-
-  @media (max-width: 800px) {
-    .home-container {
-      flex-direction: column;
+    .hero-image-wrap {
+      display: none;
     }
 
-    .home-copy {
-      flex: 0;
-      padding-bottom: 2em;
-      text-align: center;
+    h1 {
+      font-size: 36px;
+    }
+
+    .post-log {
+      padding: 0 20px 40px;
+    }
+
+    .post-row {
+      grid-template-columns: 1fr auto;
+      grid-template-rows: auto auto;
+      gap: 8px 24px;
+    }
+
+    .post-date {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    .post-tag {
+      grid-column: 2;
+      grid-row: 2;
+    }
+
+    .post-title {
+      grid-column: 1 / -1;
+      grid-row: 1;
+    }
+
+    .post-read {
+      display: none;
     }
   }
 </style>

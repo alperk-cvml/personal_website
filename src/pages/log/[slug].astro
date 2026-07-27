@@ -1,0 +1,261 @@
+---
+import { getCollection, render } from 'astro:content';
+import readingTime from 'reading-time';
+import VPLayout from '../../layouts/VPLayout.astro';
+import VPNav from '../../components/VPNav.astro';
+import VPFooter from '../../components/VPFooter.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts.map((p) => ({
+    params: { slug: p.data.slug },
+    props: { post: p },
+  }));
+}
+
+const { post } = Astro.props;
+const { title, slug, description, publishDate, tag } = post.data;
+const readMins = Math.ceil(readingTime(post.body).minutes);
+const { Content } = await render(post);
+
+const allPosts = (await getCollection('posts')).sort(
+  (a, b) => new Date(b.data.publishDate).valueOf() - new Date(a.data.publishDate).valueOf()
+);
+const idx = allPosts.findIndex((p) => p.data.slug === slug);
+const prev = idx < allPosts.length - 1 ? allPosts[idx + 1] : null;
+const next = idx > 0 ? allPosts[idx - 1] : null;
+
+function formatDate(d) {
+  const date = typeof d === 'string' ? new Date(d) : d;
+  return date.toISOString().slice(0, 10);
+}
+---
+
+<VPLayout title={`${title} — VisualPaws`} description={description}>
+  <div class="vp-page">
+    <VPNav current="log" />
+
+    <article class="post">
+      <header class="post-header">
+        <a href="/log" class="back-link">← cd ../posts</a>
+        <div class="post-meta">
+          {tag && <span class="post-tag">{tag}</span>}
+          <span>{formatDate(publishDate)}</span>
+          <span>{readMins} min read</span>
+        </div>
+        <h1>{title}</h1>
+      </header>
+
+      <div class="post-body">
+        <Content />
+      </div>
+
+      <nav class="post-nav">
+        {prev
+          ? <a href={`/log/${prev.data.slug}`} class="post-nav-link">
+              <span class="nav-label">← PREV</span>
+              <span>{prev.data.title}</span>
+            </a>
+          : <span />
+        }
+        {next
+          ? <a href={`/log/${next.data.slug}`} class="post-nav-link post-nav-next">
+              <span class="nav-label">NEXT →</span>
+              <span>{next.data.title}</span>
+            </a>
+          : <span />
+        }
+      </nav>
+    </article>
+
+    <VPFooter />
+  </div>
+</VPLayout>
+
+<style>
+  .vp-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  .post {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 56px 40px 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    flex: 1;
+    width: 100%;
+  }
+
+  /* ── header ── */
+  .post-header {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .back-link {
+    font-size: 12px;
+    color: #5c6359;
+  }
+
+  .back-link:hover {
+    color: #d8ff3e;
+  }
+
+  .post-meta {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    font-size: 12px;
+    color: #5c6359;
+  }
+
+  .post-tag {
+    color: #d8ff3e;
+    border: 1px solid #2c3520;
+    padding: 2px 8px;
+  }
+
+  h1 {
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: #d6e0d4;
+  }
+
+  /* ── body ── */
+  .post-body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 17px;
+    line-height: 1.75;
+    color: #b7beb3;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .post-body :global(p) {
+    margin: 0;
+  }
+
+  .post-body :global(h2) {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 20px;
+    font-weight: 700;
+    color: #d6e0d4;
+    margin-top: 8px;
+  }
+
+  .post-body :global(h3) {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    font-weight: 700;
+    color: #d6e0d4;
+    margin-top: 4px;
+  }
+
+  .post-body :global(pre) {
+    background: #101310;
+    border: 1px solid #1e231d;
+    padding: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    overflow-x: auto;
+    border-radius: 0;
+    margin: 0;
+  }
+
+  .post-body :global(code) {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9em;
+    color: #d8ff3e;
+    background: #101310;
+    padding: 0.1em 0.4em;
+  }
+
+  .post-body :global(pre code) {
+    color: #d6e0d4;
+    background: none;
+    padding: 0;
+  }
+
+  .post-body :global(blockquote) {
+    border-left: 2px solid #d8ff3e;
+    padding: 4px 0 4px 20px;
+    font-style: italic;
+    color: #a8b0a4;
+    font-size: 16px;
+  }
+
+  .post-body :global(img) {
+    border: 1px solid #3a4038;
+  }
+
+  .post-body :global(a) {
+    color: #d8ff3e;
+    border-bottom: 1px solid #2c3520;
+  }
+
+  .post-body :global(a:hover) {
+    color: #eaff7a;
+  }
+
+  .post-body :global(ul),
+  .post-body :global(ol) {
+    padding-left: 1.5em;
+    color: #b7beb3;
+  }
+
+  .post-body :global(hr) {
+    border: none;
+    border-top: 1px solid #1e231d;
+    margin: 8px 0;
+  }
+
+  /* ── post nav ── */
+  .post-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    padding-top: 12px;
+    border-top: 1px solid #1e231d;
+    font-size: 13px;
+  }
+
+  .post-nav-link {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    color: #8a9088;
+  }
+
+  .post-nav-link:hover {
+    color: #d8ff3e;
+  }
+
+  .post-nav-next {
+    text-align: right;
+  }
+
+  .nav-label {
+    font-size: 11px;
+    color: #5c6359;
+  }
+
+  /* ── responsive ── */
+  @media (max-width: 900px) {
+    .post {
+      padding: 32px 20px 48px;
+    }
+
+    h1 {
+      font-size: 28px;
+    }
+  }
+</style>
