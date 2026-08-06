@@ -1,0 +1,333 @@
+---
+import VPLayout from '../layouts/VPLayout.astro';
+import VPNav from '../components/VPNav.astro';
+import VPFooter from '../components/VPFooter.astro';
+---
+
+<VPLayout title="VisualPaws — The Robot" description="Open-source camera-first autonomous quadruped">
+  <div class="vp-page">
+    <VPNav current="project" />
+
+    <section class="project-hero">
+      <div class="project-intro">
+        <div class="section-label">PROJECT</div>
+        <h1>VisualPaws</h1>
+        <p class="intro-text">
+          An open-source autonomous quadruped that navigates using cameras alone — no lidar, no
+          depth sensors. Designed to be buildable on a hobbyist budget with printed parts and
+          off-the-shelf motors, and hackable down to the last line of firmware.
+        </p>
+        <div class="project-cta">
+          <a
+            href="https://github.com/alperk/visualpaws"
+            class="btn-primary"
+            target="_blank"
+            rel="noopener"
+          >
+            github.com/visualpaws
+          </a>
+          <a href="/log" class="btn-secondary">read the build log</a>
+        </div>
+      </div>
+      <div class="project-image-wrap">
+        <div class="image-placeholder">[ hero photo — full robot, side profile ]</div>
+        <div class="image-caption">fig 01 — prototype v0.4</div>
+      </div>
+    </section>
+
+    <div class="spec-table">
+      <div class="spec-table-header">SPECIFICATIONS — v0.4</div>
+      <div class="spec-grid">
+        <div class="spec-cell">
+          <div class="spec-label">MASS</div>
+          <div class="spec-value">4.8 kg</div>
+        </div>
+        <div class="spec-cell">
+          <div class="spec-label">ACTUATORS</div>
+          <div class="spec-value">12 × quasi-direct drive</div>
+        </div>
+        <div class="spec-cell">
+          <div class="spec-label">PERCEPTION</div>
+          <div class="spec-value">2 × RGB @ 60 fps</div>
+        </div>
+        <div class="spec-cell">
+          <div class="spec-label">COMPUTE</div>
+          <div class="spec-value">Onboard SBC + MCU</div>
+        </div>
+        <div class="spec-cell">
+          <div class="spec-label">RUNTIME</div>
+          <div class="spec-value">~45 min</div>
+        </div>
+        <div class="spec-cell">
+          <div class="spec-label">LICENSE</div>
+          <div class="spec-value">MIT / CERN-OHL</div>
+        </div>
+      </div>
+    </div>
+
+    <section class="subsystems">
+      <div class="subsystem-card">
+        <div class="subsystem-num">01 / VISION</div>
+        <div class="subsystem-title">Camera-first perception</div>
+        <p class="subsystem-desc">
+          Stereo depth + learned monocular fallback. Obstacle maps at 20 Hz on embedded compute.
+        </p>
+        <a href="/log" class="subsystem-link">related posts →</a>
+      </div>
+      <div class="subsystem-card">
+        <div class="subsystem-num">02 / LOCOMOTION</div>
+        <div class="subsystem-title">Gait engine</div>
+        <p class="subsystem-desc">
+          Phase-based trot with contact-delay compensation. 1 kHz control loop on the MCU.
+        </p>
+        <a href="/log" class="subsystem-link">related posts →</a>
+      </div>
+      <div class="subsystem-card">
+        <div class="subsystem-num">03 / HARDWARE</div>
+        <div class="subsystem-title">Printed structure</div>
+        <p class="subsystem-desc">
+          Carbon-nylon legs, cycloidal gearboxes, all CAD published. Full BOM under $1,500.
+        </p>
+        <a href="/log" class="subsystem-link">related posts →</a>
+      </div>
+    </section>
+
+    <VPFooter />
+  </div>
+</VPLayout>
+
+<style>
+  .vp-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  /* ── hero ── */
+  .project-hero {
+    padding: 56px 40px 48px;
+    display: grid;
+    grid-template-columns: 1fr 480px;
+    gap: 48px;
+  }
+
+  .project-intro {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .section-label {
+    font-size: 12px;
+    color: #d8ff3e;
+    letter-spacing: 0.12em;
+  }
+
+  h1 {
+    font-size: 44px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #d6e0d4;
+  }
+
+  .intro-text {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 17px;
+    line-height: 1.7;
+    color: #a8b0a4;
+  }
+
+  .project-cta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: #d8ff3e;
+    color: #0c0e0c;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 12px 20px;
+  }
+
+  .btn-primary:hover {
+    background: #eaff7a;
+    color: #0c0e0c;
+  }
+
+  .btn-secondary {
+    border: 1px solid #3a4038;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    padding: 12px 20px;
+  }
+
+  .btn-secondary:hover {
+    border-color: #d8ff3e;
+    color: #d8ff3e;
+  }
+
+  .project-image-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .image-placeholder {
+    height: 280px;
+    border: 1px solid #3a4038;
+    background: repeating-linear-gradient(
+      45deg,
+      #101310,
+      #101310 10px,
+      #141814 10px,
+      #141814 20px
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: #8a9088;
+  }
+
+  .image-caption {
+    font-size: 11px;
+    color: #5c6359;
+  }
+
+  /* ── spec table ── */
+  .spec-table {
+    margin: 0 40px;
+    border: 1px solid #1e231d;
+  }
+
+  .spec-table-header {
+    padding: 12px 20px;
+    border-bottom: 1px solid #1e231d;
+    font-size: 12px;
+    color: #8a9088;
+    letter-spacing: 0.12em;
+  }
+
+  .spec-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .spec-cell {
+    padding: 18px 20px;
+    border-right: 1px solid #1e231d;
+    border-bottom: 1px solid #1e231d;
+  }
+
+  .spec-cell:nth-child(3n) {
+    border-right: none;
+  }
+
+  .spec-cell:nth-child(n + 4) {
+    border-bottom: none;
+  }
+
+  .spec-label {
+    font-size: 11px;
+    color: #5c6359;
+  }
+
+  .spec-value {
+    font-size: 18px;
+    margin-top: 4px;
+    color: #d6e0d4;
+  }
+
+  /* ── subsystems ── */
+  .subsystems {
+    padding: 48px 40px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .subsystem-card {
+    border: 1px solid #1e231d;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .subsystem-num {
+    font-size: 12px;
+    color: #d8ff3e;
+  }
+
+  .subsystem-title {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: #e6ede3;
+  }
+
+  .subsystem-desc {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #8a9088;
+  }
+
+  .subsystem-link {
+    font-size: 12px;
+    color: #d8ff3e;
+    margin-top: auto;
+  }
+
+  .subsystem-link:hover {
+    color: #eaff7a;
+  }
+
+  /* ── responsive ── */
+  @media (max-width: 1000px) {
+    .project-hero {
+      grid-template-columns: 1fr;
+      padding: 32px 20px 32px;
+    }
+
+    .project-image-wrap {
+      display: none;
+    }
+
+    h1 {
+      font-size: 32px;
+    }
+
+    .spec-table {
+      margin: 0 20px;
+    }
+
+    .spec-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .spec-cell:nth-child(3n) {
+      border-right: 1px solid #1e231d;
+    }
+
+    .spec-cell:nth-child(2n) {
+      border-right: none;
+    }
+
+    .spec-cell:nth-child(n + 4) {
+      border-bottom: 1px solid #1e231d;
+    }
+
+    .spec-cell:nth-last-child(-n + 2) {
+      border-bottom: none;
+    }
+
+    .subsystems {
+      grid-template-columns: 1fr;
+      padding: 32px 20px;
+    }
+  }
+</style>
